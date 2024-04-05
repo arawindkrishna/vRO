@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getCloudZonesByRegion" result-type="Array/string" api-version="6.0.0" id="53fabff3-d8d1-4ccd-8f9e-1617d93c89f3" version="1.0.0" category-name="com.shs.library.vra">
+  <param n="region" t="string"/>
+  <script encoded="false"><![CDATA[var vraHost = System.getModule("com.shs.library.vra.utility").getConfigurationElement("conf_vraCloudHost", "/Library", "VRAHost").value;
+var cloudZones = VraEntitiesFinder.getCloudZones(vraHost);
+
+var output = new Array();
+for (i = 0; i < cloudZones.length; i++) 
+{
+    var customTags = cloudZones[i].tags;
+    for (j = 0; j < customTags.length; j++) 
+    {
+        if(customTags[j].key =="region" && customTags[j].value == region){
+            output.push(cloudZones[i].name);
+        }
+    }
+    
+}
+return output;]]></script>
+</dunes-script-module>

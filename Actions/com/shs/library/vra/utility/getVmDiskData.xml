@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVmDiskData" result-type="Any" api-version="6.0.0" id="b239a958-c918-4b7c-95d8-691297b61d8b" version="1.0.0" category-name="com.shs.library.vra.utility">
+  <description><![CDATA[Returns total storage size of VM]]></description>
+  <param n="vmName" t="VC:VirtualMachine"/>
+  <script encoded="false"><![CDATA[var data = new Object();
+var size = 0;
+var count = 0;
+if(vmName)
+{
+    System.log(vmName.guestOS);
+    var devices = vmName.config.hardware.device;
+    devices.forEach(function (device) {
+        if (device instanceof VcVirtualDisk) {
+            var de = device;
+            size += de.capacityInKB / 1024 / 1024;
+            count = count + 1;
+        }
+    });
+    break;
+}
+
+data["size"] = size.toString();
+data["count"] = count;
+
+return data;
+
+]]></script>
+</dunes-script-module>

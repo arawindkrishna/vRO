@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="bd27a3f3-fa39-40c9-b5b8-cc0f8521f1c1" version="1.0.0">
+  <display-name><![CDATA[RESTHosts]]></display-name>
+  <atts>
+    <att name="conf_cspHost" type="REST:RESTHost" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='ad517812-fb3d-49d8-a3f3-4d1a30374f61'&dunesName='REST:RESTHost']]></value>
+    </att>
+    <att name="conf_apiHost" type="REST:RESTHost" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='2bc2cde1-fb62-471f-b8f6-d8ffd414174e'&dunesName='REST:RESTHost']]></value>
+    </att>
+  </atts>
+</config-element>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item3" object-name="workflow:name=generic" id="9bee97bc-4f38-4fd1-8e36-a05e962888ac" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Update Active Directory</display-name>
+    <position y="30.0" x="80.0"/>
+    <input>
+        <param name="in_vmName" type="string"/>
+        <param name="in_event" type="string"/>
+        <param name="in_domain" type="string"/>
+    </input>
+    <output>
+        <param name="out_outputStatus" type="boolean"/>
+    </output>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="100.0" x="760.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item10" alt-out-name="item5" type="custom-condition" comparator="0">
+        <display-name>isNewVM?</display-name>
+        <script encoded="false">if(in_event.indexOf("VmCreatedEvent")!=-1){&#13;
+    return true;&#13;
+}&#13;
+return false;</script>
+        <in-binding>
+            <bind name="in_event" type="string" export-name="in_event"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="30.0" x="280.0"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item10" alt-out-name="item14" type="custom-condition" comparator="0">
+        <display-name>isVMCloned?</display-name>
+        <script encoded="false">if(in_event.indexOf("VmClonedEvent")!=-1){&#13;
+    return true;&#13;
+}&#13;
+return false;</script>
+        <in-binding>
+            <bind name="in_event" type="string" export-name="in_event"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="100.0" x="280.0"/>
+    </workflow-item>
+    <workflow-item name="item10" out-name="item0" type="link" linked-workflow-id="e9b549eb-8ae6-42c3-9e1d-2c90e1f6b767" comparator="0">
+        <display-name>Create AD Entry</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="in_vmName" type="string" export-name="in_vmName"/>
+            <bind name="in_domain" type="string" export-name="in_domain"/>
+        </in-binding>
+        <out-binding>
+            <bind name="out_status" type="boolean" export-name="out_outputStatus"/>
+        </out-binding>
+        <description> </description>
+        <position y="110.0" x="500.0"/>
+    </workflow-item>
+    <workflow-item name="item12" out-name="item0" type="link" linked-workflow-id="c9096562-21b1-4a2b-8832-f38d3e2e5326" comparator="0">
+        <display-name>Delete AD Entry</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="in_vmName" type="string" export-name="in_vmName"/>
+        </in-binding>
+        <out-binding/>
+        <description> </description>
+        <position y="180.0" x="500.0"/>
+    </workflow-item>
+    <workflow-item name="item13" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="170.0" x="100.0"/>
+    </workflow-item>
+    <workflow-item name="item14" out-name="item12" alt-out-name="item13" type="custom-condition" comparator="0">
+        <display-name>isVMDeleted?</display-name>
+        <script encoded="false">if(in_event.indexOf("VmRemovedEvent")!=-1){&#13;
+    return true;&#13;
+}&#13;
+return false;</script>
+        <in-binding>
+            <bind name="in_event" type="string" export-name="in_event"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="170.0" x="280.0"/>
+    </workflow-item>
+</ns2:workflow>

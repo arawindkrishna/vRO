@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="0200d6b3-ca07-416a-bd8d-43410f5e8458" version="1.0.0">
+  <display-name><![CDATA[Authentication]]></display-name>
+  <atts>
+    <att name="conf_accessToken" type="SecureString" read-only="false">
+      <value encoded="n"><![CDATA[__NULL__]]></value>
+    </att>
+  </atts>
+</config-element>

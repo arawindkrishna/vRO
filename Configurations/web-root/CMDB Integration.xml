@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="b3703f61-6fd4-450d-8432-310637b4769a" version="0.1.0" allowed-operations="vfe">
+  <display-name><![CDATA[CMDB Integration]]></display-name>
+  <atts>
+    <att name="conf_sharpPayload" type="Text" read-only="false">
+      <value encoded="n"><![CDATA[{
+    "externalID": "",
+    "ticketStatus": "New",
+    "businessService": "Hybrid Cloud (Azure, AWS, DataCenter, Private Cloud)",
+    "ci": "AS - Managed Windows Server - Internal",
+    "subCI": "",
+    "subsubCI": "",
+    "correlationSource": "HC_Cloud_Portal",
+    "priority": "4",
+    "shortDescription": "",
+    "detailedDescription": "",
+    "contactType": "Self-service",
+    "internalWorkNotes": "",
+    "incidentType": "Request",
+    "subcategory": "Request for Change",
+    "customerCommunication": "",
+    "requester": {
+        "gid": "Z004P3PH",
+        "email": "hcon-premfunctionalaccount.func@siemens-healthineers.com"
+    },
+    "receiver": {
+        "gid": "Z004P3PH",
+        "email": "hcon-premfunctionalaccount.func@siemens-healthineers.com"
+    }
+}]]></value>
+    </att>
+    <att name="conf_sharpURLTemplate" type="string" read-only="false">
+      <value encoded="n"><![CDATA[/slsched/feed/SIE_Health_Dev/SnapLogic_Integrations/SHARP_Interface/postIncidentData_Provider_SHARP_Task]]></value>
+    </att>
+    <att name="conf_cmdbURLTemplate" type="string" read-only="false">
+      <value encoded="n"><![CDATA[/slsched/feed/SIE_Health_Dev/projects/Azure_Sharp_CMDB/PostVM_BOT_SHARP_CMDB%20Task]]></value>
+    </att>
+    <att name="conf_cmdbPayload" type="Text" read-only="false">
+      <value encoded="n"><![CDATA[{
+    "vmhostname": "",
+    "status":"",
+    "manufacturer":"VMware",
+    "model_id":"VMware Virtual Server",
+    "owned_by":"",
+    "osversion":"",
+    "disk_size":"",
+    "mac_address": "",
+    "ip_address": "",
+    "assigned_to": "",
+    "ci_maintenance_group":"CMDB Cloud CI Maintenance",
+    "support_group":"Hybrid Cloud First Responders",
+    "install_location":"",
+    "environment": "",
+    "ad_domain":"vms.ad.varian.com",
+    "network_type":"",
+    "correlation_id":"",
+    "correlation_source":"Snaplogic/VMS/VMware",
+    "cpus": "",
+    "memory": "",
+    "disks": "",
+    "resourceid": "",
+    "state":"",
+    "application_owner": ""
+}]]></value>
+    </att>
+    <att name="conf_recipients" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[52:string#sanjaykumar.rudrawal@siemens-healthineers.com,30:string#amit.randive@varian.com,32:string#snigdha.jadhav@varian.com,52:string#shaikmohammed.iliyas@siemens-healthineers.com,50:string#tedcindchangmgr.dl@siemens-healthineers.com]]]></value>
+    </att>
+    <att name="conf_cmdb_restHost_old" type="REST:RESTHost" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='55d8eff5-5d2f-461d-a88a-8b758244f828'&dunesName='REST:RESTHost']]></value>
+    </att>
+    <att name="conf_sharp_restHost" type="REST:RESTHost" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='9ea45649-fce0-4dfa-95e1-9a3b90ed65fa'&dunesName='REST:RESTHost']]></value>
+    </att>
+    <att name="conf_cmdb_restHost" type="REST:RESTHost" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='f0bf4846-dbca-4f98-baa7-3e6fef1e04c0'&dunesName='REST:RESTHost']]></value>
+    </att>
+  </atts>
+</config-element>

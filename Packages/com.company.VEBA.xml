@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='368180808080808080808080808080809880808001270557368849c62c352aa82'&dunesName='Action'&name='getComputerFromContainer'&category='com.vmware.library.microsoft.activeDirectory']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='36818080808080808080808080808080CE80808001270557368849c62c352aa82'&dunesName='Action'&name='createComputer'&category='com.vmware.library.microsoft.activeDirectory']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='4ef7f5c8-64aa-4172-bfb3-a125cc824169'&dunesName='Action'&name='destroyElementRecursive'&category='com.vmware.library.microsoft.activeDirectory']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='5b657dc4-64f3-4699-8be5-bd025ae26d32'&dunesName='Action'&name='getVMByName'&category='com.shs.library.vra.utility']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='6b9cc2ce-015b-4432-8850-989b2ddab336'&dunesName='Action'&name='getComputeResourceOfVm'&category='com.vmware.library.vc.cluster']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='958080808080808080808080808080804C81808001175609873343b6bbd2e3eea'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='95e038a4-e64b-4e24-a5e7-f42722932375'&dunesName='Action'&name='getVmData'&category='com.shs.library.vra.utility']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='9bee97bc-4f38-4fd1-8e36-a05e962888ac'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='a55ae97d-aabd-445d-8417-a82a4b5af6de'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='b239a958-c918-4b7c-95d8-691297b61d8b'&dunesName='Action'&name='getVmDiskData'&category='com.shs.library.vra.utility']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='b3703f61-6fd4-450d-8432-310637b4769a'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='c2afdc7d-55d7-4dec-9747-fefba83c164a'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='c9096562-21b1-4a2b-8832-f38d3e2e5326'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='d1506821-0c35-460f-b54c-256488cbf8d3'&dunesName='Action'&name='getVMIpAddress'&category='com.shs.library.vra.utility']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='e0058c19-2a43-4f13-8a50-ff078e8f2430'&dunesName='Action'&name='getMacAddressByVM'&category='com.shs.library.vra.utility']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='e08f3edf-8706-4382-9743-ba47621a3a2d'&dunesName='Action'&name='getCpuAndMemoryOfVm'&category='com.shs.library.vra.utility']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='e9b549eb-8ae6-42c3-9e1d-2c90e1f6b767'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='fb93b890-707b-4c90-8963-23d743d8e442'&dunesName='Workflow']]></elm>
+<used-plugin name='AD' version='3.1.0' />
+<used-plugin name='REST' version='2.5.5' />
+</package>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="f7b5a183-d60f-4ef9-8e30-08e9e59f6718" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Universal Request Processor</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="in_domain" type="string">
+            <description>domain where AD computer object for new VM need to be created</description>
+        </param>
+        <param name="in_flavor" type="string">
+            <description>t-shirt size of VM</description>
+        </param>
+        <param name="in_image" type="string">
+            <description>template need to be used for VM creation</description>
+        </param>
+        <param name="in_network" type="string">
+            <description>network selection for VM placement</description>
+        </param>
+        <param name="in_customDeploymentName" type="boolean">
+            <description>whether user requires custom deployment name</description>
+        </param>
+        <param name="in_location" type="string">
+            <description>location where VM need to be provisioned</description>
+        </param>
+        <param name="in_project" type="string"/>
+        <param name="in_environmentType" type="string"/>
+        <param name="in_customNetRequired" type="boolean"/>
+        <param name="in_owner1" type="string"/>
+        <param name="in_owner2" type="string"/>
+    </input>
+    <output/>
+    <attrib name="att_payload" type="Properties">
+        <value encoded="n">{}</value>
+    </attrib>
+    <attrib name="att_authToken" type="SecureString" conf-id="0200d6b3-ca07-416a-bd8d-43410f5e8458" conf-key="conf_accessToken"/>
+    <attrib name="att_cspRest" type="REST:RESTHost">
+        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='ad517812-fb3d-49d8-a3f3-4d1a30374f61'&amp;dunesName='REST:RESTHost'</value>
+    </attrib>
+    <attrib name="att_apiRest" type="REST:RESTHost">
+        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='2bc2cde1-fb62-471f-b8f6-d8ffd414174e'&amp;dunesName='REST:RESTHost'</value>
+    </attrib>
+    <attrib name="att_cloudTemplateId" type="string">
+        <value encoded="n">4a8b425c-f2f9-48af-9e72-691478310662</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="740.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" comparator="0">
+        <display-name>Pre-Work</display-name>
+        <script encoded="false">// create tags based on location for choosing cloud account&#13;
+var cloudAccType = "";&#13;
+var envType = "";&#13;
+var netType = "";&#13;
+att_payload = new Properties();&#13;
+&#13;
+if (in_location == "PA-POC") {&#13;
+    cloudAccType = "vro:test";&#13;
+    envType = "test";&#13;
+    netType = "pa_poc";&#13;
+}&#13;
+&#13;
+att_payload.put("cloudAccountType", cloudAccType);&#13;
+att_payload.put("envType", envType);&#13;
+att_payload.put("netType", netType);&#13;
+</script>
+        <in-binding>
+            <bind name="in_domain" type="string" export-name="in_domain"/>
+            <bind name="in_network" type="string" export-name="in_network"/>
+            <bind name="in_project" type="string"/>
+            <bind name="in_flavor" type="string" export-name="in_flavor"/>
+            <bind name="in_image" type="string" export-name="in_image"/>
+            <bind name="att_cspRest" type="REST:RESTHost" export-name="att_cspRest"/>
+            <bind name="att_apiRest" type="REST:RESTHost" export-name="att_apiRest"/>
+            <bind name="att_authToken" type="SecureString" export-name="att_authToken"/>
+            <bind name="in_customDeploymentName" type="boolean" export-name="in_customDeploymentName"/>
+            <bind name="in_location" type="string" export-name="in_location"/>
+        </in-binding>
+        <out-binding>
+            <bind name="att_payload" type="Properties" export-name="att_payload"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="200.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="task" comparator="0">
+        <display-name>Request Deployment</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="att_cloudTemplateId" type="string" export-name="att_cloudTemplateId"/>
+            <bind name="att_payload" type="Properties" export-name="att_payload"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="480.0"/>
+    </workflow-item>
+    <workflow-item name="item3" type="task" comparator="0">
+        <display-name>Generate Hostname</display-name>
+        <script encoded="false">// generate hostname or use global custom naming template based on user inputs&#13;
+// add to payload</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="140.0" x="320.0"/>
+    </workflow-item>
+</ns2:workflow>

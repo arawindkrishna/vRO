@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='0200d6b3-ca07-416a-bd8d-43410f5e8458'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='02b070a6-b142-4b4a-a875-950115e0e2ac'&dunesName='Action'&name='getProjectsByUser'&category='com.shs.library.vra.utility']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='0629ca1b-e481-452b-9cbe-4097c068a1ec'&dunesName='Action'&name='getAllCatalogItems'&category='com.shs.library.vra']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='37752396-4df4-4665-9c24-3e80f8ab4c3b'&dunesName='Action'&name='getBearerToken'&category='com.shs.library.vra.authentication']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='4737aa72-ea50-454b-9542-3881e2eb341e'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='59d78c6f-6a21-4759-8c52-74415550f2f5'&dunesName='Action'&name='getListOfCloudZonesByProjects'&category='com.shs.library.vra']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='760d0fe5-7312-42c8-b4ca-01f644038244'&dunesName='Action'&name='getAllImages'&category='com.shs.library.vra']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='77cb4bc2-6473-4332-bf3d-ef3f1be92c5b'&dunesName='Action'&name='getNetworks'&category='com.shs.library.vra']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='82c50356-53be-4824-85b9-1507911ce4ca'&dunesName='Action'&name='getAllFlavors'&category='com.shs.library.vra']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='bc3fd4ba-d446-4678-b83b-211db628ebef'&dunesName='Action'&name='getConfigurationElement'&category='com.shs.library.vra.utility']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='bd27a3f3-fa39-40c9-b5b8-cc0f8521f1c1'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='f7b5a183-d60f-4ef9-8e30-08e9e59f6718'&dunesName='Workflow']]></elm>
+</package>

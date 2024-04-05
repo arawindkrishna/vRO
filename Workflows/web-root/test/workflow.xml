@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="b8309bbe-166e-4655-8e35-a4269270aad3" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>test</display-name>
+    <position y="50.0" x="100.0"/>
+    <input/>
+    <output/>
+    <attrib name="att_host" type="VRA:Host" conf-id="4737aa72-ea50-454b-9542-3881e2eb341e" conf-key="conf_vraCloudHost"/>
+    <attrib name="att_machines" type="Array/VRA:Machine">
+        <value encoded="n">[]</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="700.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" script-module="com.vmware.library.vra.infrastructure.machine/getAllMachines" comparator="0">
+        <display-name>getAllMachines</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.library.vra.infrastructure.machine").getAllMachines(host);
+</script>
+        <in-binding>
+            <bind name="host" type="VRA:Host" export-name="att_host">
+                <description>VMware Aria Automation Host</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Array/VRA:Machine" export-name="att_machines"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="340.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">for each (vm in vms) {&#13;
+      System.log(vm.name);&#13;
+    }</script>
+        <in-binding>
+            <bind name="att_machines" type="Array/VRA:Machine" export-name="att_machines"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="500.0"/>
+    </workflow-item>
+</ns2:workflow>

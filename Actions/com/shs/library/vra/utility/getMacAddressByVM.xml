@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getMacAddressByVM" result-type="string" api-version="6.0.0" id="e0058c19-2a43-4f13-8a50-ff078e8f2430" version="1.0.0" category-name="com.shs.library.vra.utility">
+  <description><![CDATA[Returns MacAddress of VM using VMName]]></description>
+  <param n="vmName" t="VC:VirtualMachine"/>
+  <script encoded="false"><![CDATA[var macAddress="";
+if(vmName){
+    for each(var device in vmName.config.hardware.device)
+    {
+        var deviceInfo = device.deviceInfo.label;
+        if (deviceInfo.indexOf("Network adapter") != -1) {
+            macAddress = device.macAddress;
+            macAddress = macAddress.replace(/-/g,":")
+            return macAddress;
+        }
+    }
+}
+
+return macAddress;]]></script>
+</dunes-script-module>

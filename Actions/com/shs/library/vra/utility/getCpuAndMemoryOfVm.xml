@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getCpuAndMemoryOfVm" result-type="Properties" api-version="6.0.0" id="e08f3edf-8706-4382-9743-ba47621a3a2d" version="1.0.0" category-name="com.shs.library.vra.utility">
+  <description><![CDATA[Return CPU and Memory of VM]]></description>
+  <param n="vmName" t="VC:VirtualMachine"/>
+  <script encoded="false"><![CDATA[var prop = new Properties();
+
+if (vmName) {
+    prop["cpu"] = vm.cpu.split(" ")[0];
+    prop["memory"] = Number(vm.memory.split(" ")[0]);
+}
+
+return prop;]]></script>
+</dunes-script-module>

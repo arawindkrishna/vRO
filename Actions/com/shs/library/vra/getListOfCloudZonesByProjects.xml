@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getListOfCloudZonesByProjects" result-type="Array/string" api-version="6.0.0" id="59d78c6f-6a21-4759-8c52-74415550f2f5" version="1.0.0" category-name="com.shs.library.vra">
+  <param n="project" t="string"/>
+  <script encoded="false"><![CDATA[var vraHost = System.getModule("com.shs.library.vra.utility").getConfigurationElement("conf_vraCloudHost", "/Library", "VRAHost").value;
+var allprojects = VraEntitiesFinder.getProjects(vraHost);
+
+var zones = new Array();
+
+for (i = 0; i < allprojects.length; i++) {
+    if (project == allprojects[i].id) {
+        var zoneData = System.getModule("com.vmware.library.vra.infrastructure").getProjectCloudZones(allprojects[i]);
+        if (zoneData) {
+            System.log(JSON.stringify(zoneData));
+            for each(var zone in zoneData) {
+                zones.push(zone.zoneName);
+            }
+        }
+    }
+}
+
+return zones;]]></script>
+</dunes-script-module>

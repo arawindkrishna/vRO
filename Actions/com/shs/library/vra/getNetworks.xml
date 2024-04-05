@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getNetworks" result-type="Array/string" api-version="6.0.0" id="77cb4bc2-6473-4332-bf3d-ef3f1be92c5b" version="1.0.0" category-name="com.shs.library.vra">
+  <param n="location" t="string"/>
+  <param n="environment" t="string"/>
+  <script encoded="false"><![CDATA[var vraHost = System.getModule("com.shs.library.vra.utility").getConfigurationElement("conf_vraCloudHost", "/Library", "VRAHost").value;
+
+var allnetworks = VraEntitiesFinder.getNetworks(vraHost);
+var result = new Array();
+var networks = new Array()
+for (var inetwork = 0; inetwork < allnetworks.length; inetwork++) {
+
+    if (allnetworks[inetwork].tags != null) {
+        networktags = allnetworks[inetwork].tags;
+        for (var itags = 0; itags < networktags.length; itags++) {
+            if ((networktags[itags].value == location && networktags[itags].key == "net") || (networktags[itags].value == environment && networktags[itags].key == "env")) {
+                networks.push(allnetworks[inetwork].name.toLowerCase());
+            }
+        }
+    }
+
+
+}
+
+return networks
+]]></script>
+</dunes-script-module>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="4737aa72-ea50-454b-9542-3881e2eb341e" version="1.0.0">
+  <display-name><![CDATA[VRAHost]]></display-name>
+  <atts>
+    <att name="conf_vraCloudHost" type="VRA:Host" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='Qu2q00XpQHq5hv1pX2L3uA'&dunesName='VRA:Host']]></value>
+    </att>
+  </atts>
+</config-element>

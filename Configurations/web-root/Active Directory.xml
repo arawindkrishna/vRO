@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="5e2e86b8-969f-44da-9239-6bcae1166a9f" version="0.0.0">
+  <display-name><![CDATA[Active Directory]]></display-name>
+  <atts>
+    <att name="conf_pa_poc" type="AD:AdHost" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='%23_v2_%23%2C%23RootItem%23%2C%239f1e49c6-1869-4a16-b83c-a978ab26a501%23'&dunesName='AD:AdHost']]></value>
+    </att>
+  </atts>
+</config-element>

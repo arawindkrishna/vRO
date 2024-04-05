@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item2" object-name="workflow:name=generic" id="a55ae97d-aabd-445d-8417-a82a4b5af6de" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Update AD Comp Attributes</display-name>
+    <position y="50.0" x="100.0"/>
+    <input/>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="460.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Set attributes</display-name>
+        <script encoded="false">if (!adObject) {&#13;
+    throw "Update Attributes: No object found with distinguished name: " + objDistinguishedName;&#13;
+}&#13;
+&#13;
+if (!attributes) {&#13;
+    throw "No attributes found for update. ";&#13;
+}&#13;
+&#13;
+&#13;
+for (var i = 0; i &lt; attributes.keys.length; i++) {&#13;
+    var attrName = attributes.keys[i];&#13;
+    var attrValue = attributes.get(attrName).toString();&#13;
+&#13;
+    try {&#13;
+        // Fails if attrib with name attrName does not exist or if the attrib is a single value attrib&#13;
+        adObject.addAttribute(attrName, attrValue);&#13;
+        System.info("The new attribut value: " + attrValue + " successfully added to " + attrName + ".");&#13;
+    } catch (ex) {&#13;
+        if (ex instanceof InternalError) {&#13;
+            if (!ex.message.match(/ATT_OR_VALUE_EXISTS/)) {&#13;
+                throw "Failed to update object attributes: " + attributes.keys.slice(attributes.keys.indexOf(attrName)) + " " + ex;&#13;
+            }&#13;
+&#13;
+            var attribValues = adObject.getArrayAttribute(attrName);&#13;
+&#13;
+            //Check if attrValue is already set as a value in an array type attribs.&#13;
+            if (attribValues.indexOf(attrValue) &lt; 0) {&#13;
+                adObject.setAttribute(attrName, attrValue);&#13;
+                System.info("The attribute " + attrName + " value is updated to " + attrValue + ".");&#13;
+            } else {&#13;
+                System.info("The new attribut value: " + attrValue + " is already set. Current value is: " + attribValues +&#13;
+                    " The value of the attribut " + attrName + " is not changed.");&#13;
+            }&#13;
+        } else {&#13;
+            throw "Failed to update object attributes: " + attributes.keys.slice(attributes.keys.indexOf(attrName)) + " " + ex;&#13;
+        }&#13;
+    }&#13;
+}&#13;
+&#13;
+</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item1" type="task" comparator="0">
+        <display-name>Pre-Work</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="160.0"/>
+    </workflow-item>
+</ns2:workflow>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVmData" result-type="Any" api-version="6.0.0" id="95e038a4-e64b-4e24-a5e7-f42722932375" version="1.0.0" category-name="com.shs.library.vra.utility">
+  <description><![CDATA[Returns guestOs of VM using VMName]]></description>
+  <param n="vmName" t="VC:VirtualMachine"/>
+  <script encoded="false"><![CDATA[
+var vmData = new Object();
+
+if (vmName) {
+    vmData["os"] = vm.guestOS;
+    vmData["instanceId"] = vm.instanceId;
+    
+    var state = vm.state;
+    if (state == "poweredOn") {
+        vmData["state"] = "Running";
+    }
+    else if (state == "poweredOff") {
+        vmData["state"] = "Stopped";
+    }
+}
+
+
+return vmData;]]></script>
+</dunes-script-module>

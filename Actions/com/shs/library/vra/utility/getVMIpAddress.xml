@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVMIpAddress" result-type="string" api-version="6.0.0" id="d1506821-0c35-460f-b54c-256488cbf8d3" version="1.0.0" category-name="com.shs.library.vra.utility">
+  <description><![CDATA[get Ip address of VM by providing vmName]]></description>
+  <param n="vmName" t="VC:VirtualMachine"/>
+  <script encoded="false"><![CDATA[var ipAddress = "";
+
+if (vmName) {
+    ipAddress = vm.ipAddress;
+}
+
+return ipAddress;]]></script>
+</dunes-script-module>

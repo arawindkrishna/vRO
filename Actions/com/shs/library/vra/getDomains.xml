@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getDomains" result-type="Array/string" api-version="6.0.0" id="2cf8f39d-ee50-436b-acad-67df2ad3e5cc" version="1.0.0" category-name="com.shs.library.vra">
+  <param n="project" t="string"/>
+  <script encoded="false"><![CDATA[var vraHost = System.getModule("com.shs.library.vra.utility").getConfigurationElement("conf_vraCloudHost", "/Library", "VRAHost").value;
+var allprojects = VraEntitiesFinder.getProjects(vraHost);
+var domains = new Array();
+
+for (i = 0; i < allprojects.length; i++) {
+    if (project == allprojects[i].id) {
+        if(allprojects[i].name == "Varian"){
+            domains.push("vms");
+        }
+        else{
+            domains.push("ad005");
+        }
+    }
+}
+
+return domains;]]></script>
+</dunes-script-module>

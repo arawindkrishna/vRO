@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getOrgUnit" result-type="string" api-version="6.0.0" id="d70f7c74-ea8a-4cd7-b4f9-04044c5140ea" version="1.0.0" category-name="com.shs.library.vra.utility">
+  <script encoded="false"><![CDATA[System.log(ActiveDirectory.search("OrganizationalUnit","POC"));]]></script>
+</dunes-script-module>

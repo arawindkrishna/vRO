@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getBearerToken" result-type="string" api-version="6.0.0" id="37752396-4df4-4665-9c24-3e80f8ab4c3b" version="1.0.0" category-name="com.shs.library.vra.authentication">
+  <script encoded="false"><![CDATA[var cspRestHost = System.getModule("com.shs.library.vra.utility").getConfigurationElement("conf_cspHost","/Library","RESTHosts").value;
+var apiToken = System.getModule("com.shs.library.vra.utility").getConfigurationElement("conf_accessToken","/Library","Authentication").value;
+
+if (apiToken)
+{
+    if (cspRestHost) {
+        try {
+            var url = "/am/api/auth/api-tokens/authorize";
+            var requestContent = "refresh_token=" + apiToken;
+
+            var request = cspRestHost.createRequest("POST", url, requestContent);
+
+            request.setHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.setHeader("Cache-Control", "no-cache");
+
+            var requestResponse = request.execute();
+
+            if (requestResponse.statusCode != 200) {
+                System.log("Bearer token request has returned an error status code:" + requestResponse.statusCode);
+                throw "Error: " + requestResponse.statusCode;
+            }
+
+            var bearerToken = JSON.parse(requestResponse.contentAsString).access_token;
+            return bearerToken;
+
+        }
+        catch (e) {
+            System.log("An un-handled excpetion was caught: " + e);
+            throw e
+        }
+    }
+    else {
+        throw "No CSP REST host provided";
+    }
+}
+else {
+    throw "No API token provided";
+
+}
+]]></script>
+</dunes-script-module>

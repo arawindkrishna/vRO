@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getAllImages" result-type="Array/string" api-version="6.0.0" id="760d0fe5-7312-42c8-b4ca-01f644038244" version="1.0.0" category-name="com.shs.library.vra">
+  <description><![CDATA[Fetch all image mappings ]]></description>
+  <script encoded="false"><![CDATA[var vraHost = System.getModule("com.shs.library.vra.utility").getConfigurationElement("conf_vraCloudHost", "/Library", "VRAHost").value;
+return System.getModule("com.vmware.library.vra.infrastructure.image").getAllImageMapping(vraHost)]]></script>
+</dunes-script-module>

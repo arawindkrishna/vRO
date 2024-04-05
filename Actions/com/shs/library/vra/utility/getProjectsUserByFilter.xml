@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getProjectsUserByFilter" result-type="Properties" api-version="6.0.0" id="c2d3be48-ab9f-4e01-8a27-305fff803e8a" version="1.0.0" category-name="com.shs.library.vra.utility">
+  <param n="filter" t="string"/>
+  <param n="projectId" t="string"/>
+  <script encoded="false"><![CDATA[var userData = new Object();
+
+if(!filter)
+{
+    return userData;
+}
+var apiRestHost = System.getModule("com.shs.library.vra.utility").getConfigurationElement("conf_apiHost", "/Library", "RESTHosts").value;
+var token = System.getModule("com.shs.library.vra.authentication").getBearerToken()
+
+var url = "/iaas/api/projects/"+projectId;
+System.log(url);
+var request = apiRestHost.createRequest("GET", url, "");
+var response = "";
+request.setHeader("Content-Type", "application/json");
+request.setHeader("Cache-Control", "no-cache");
+request.setHeader("Authorization", "Bearer " + token);
+
+try {
+    response = request.execute();
+}
+catch (err) {
+    System.error("error is :" + err);
+}
+
+var projectResource = JSON.parse(response.contentAsString);
+
+var admins = projectResource.administrators;
+var members = projectResource.members;
+var users = admins.concat(members);
+
+for each(usr in users){
+    if(usr.email.indexOf(filter.toLowerCase())!=-1) {
+        userData[usr.email] = usr.email;
+    }
+}
+
+return userData;]]></script>
+</dunes-script-module>

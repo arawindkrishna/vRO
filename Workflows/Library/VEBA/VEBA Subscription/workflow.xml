@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item5" object-name="workflow:name=generic" id="fb93b890-707b-4c90-8963-23d743d8e442" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>VEBA Subscription</display-name>
+    <position y="15.294117647058826" x="27.058823529411768"/>
+    <input>
+        <param name="eventData" type="Properties"/>
+        <param name="vmName" type="string"/>
+        <param name="subject" type="string"/>
+        <param name="requestId" type="string"/>
+    </input>
+    <output/>
+    <attrib name="att_cmdb_restHost" type="REST:RESTHost" conf-id="b3703f61-6fd4-450d-8432-310637b4769a" conf-key="conf_cmdb_restHost"/>
+    <attrib name="att_sharp_restHost" type="REST:RESTHost" conf-id="b3703f61-6fd4-450d-8432-310637b4769a" conf-key="conf_sharp_restHost"/>
+    <attrib name="att_data" type="Properties">
+        <value encoded="n">{}</value>
+    </attrib>
+    <attrib name="att_event" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="att_cmdbPayloadTemplate" type="Text" conf-id="b3703f61-6fd4-450d-8432-310637b4769a" conf-key="conf_cmdbPayload"/>
+    <attrib name="att_cmdbPayload" type="Properties">
+        <value encoded="n">{}</value>
+    </attrib>
+    <attrib name="att_cmdbURLTemplate" type="string" conf-id="b3703f61-6fd4-450d-8432-310637b4769a" conf-key="conf_cmdbURLTemplate"/>
+    <attrib name="att_statusCode" type="number">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="att_isSharpTicketCreated" type="boolean">
+        <value encoded="n">false</value>
+    </attrib>
+    <attrib name="att_sharpURLTemplate" type="string" conf-id="b3703f61-6fd4-450d-8432-310637b4769a" conf-key="conf_sharpURLTemplate"/>
+    <attrib name="att_sharpPayloadTemplate" type="Text" conf-id="b3703f61-6fd4-450d-8432-310637b4769a" conf-key="conf_sharpPayload"/>
+    <attrib name="att_domain" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="att_adOutputStatus" type="boolean">
+        <value encoded="n">true</value>
+    </attrib>
+    <workflow-item name="item1" out-name="item6" type="task" comparator="0">
+        <display-name>Prepare Payload</display-name>
+        <script encoded="false">var vm = System.getModule("com.shs.library.vra.utility").getVMByName(vmName);
+
+att_cmdbPayload = JSON.parse(att_cmdbPayloadTemplate);
+att_cmdbPayload["vmhostname"] = vmName;
+
+if (eventData["info"] != undefined &amp;&amp; eventData["info"] == "vmResize") {
+    var cpuAndMemory = System.getModule("com.shs.library.vra.utility").getCpuAndMemoryOfVm(vm);
+    att_cmdbPayload["Cpus"] = cpuAndMemory["cpu"];
+    att_cmdbPayload["Memory"] = cpuAndMemory["memory"];
+}
+else if (eventData["info"] != undefined &amp;&amp; eventData["info"] == "Disk modified") {
+    var disk = System.getModule("com.shs.library.vra.utility").getVmDiskData(vm);
+    att_cmdbPayload["Disks"] = disk;
+}</script>
+        <in-binding>
+            <bind name="eventData" type="Properties" export-name="eventData"/>
+            <bind name="vmName" type="string" export-name="vmName"/>
+            <bind name="att_cmdbPayloadTemplate" type="Text" export-name="att_cmdbPayloadTemplate"/>
+            <bind name="requestId" type="string" export-name="requestId"/>
+        </in-binding>
+        <out-binding>
+            <bind name="att_cmdbPayload" type="Properties" export-name="att_cmdbPayload"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="213.52941176470588" x="434.11764705882354"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item1" alt-out-name="item20" type="custom-condition" comparator="0">
+        <display-name>isVmReconfigured?</display-name>
+        <script encoded="false">if(subject.indexOf("VmReconfiguredEvent")!=-1){
+    return true;
+}
+return false;</script>
+        <in-binding>
+            <bind name="subject" type="string" export-name="subject"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="203.52941176470588" x="245.88235294117646"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item18" alt-out-name="item23" type="custom-condition" comparator="0">
+        <display-name>isVMCreated?</display-name>
+        <script encoded="false">if(subject.indexOf("VmCreatedEvent")!=-1){
+    return true;
+}
+return false;</script>
+        <in-binding>
+            <bind name="subject" type="string" export-name="subject"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="15.294117647058826" x="245.88235294117646"/>
+    </workflow-item>
+    <workflow-item name="item6" out-name="item13" type="task" comparator="0">
+        <display-name>Push to CMDB</display-name>
+        <script encoded="false">var restOp = new RESTOperation("Snaplogic");
+restOp.method = "POST";
+restOp.urlTemplate = att_cmdbURLTemplate;
+
+System.log("Payload: " + JSON.stringify(att_cmdbPayload));
+
+var op = att_cmdb_restHost.addOperation(restOp);
+var req = op.createRequest(null, JSON.stringify(att_cmdbPayload));
+req.contentType = "application/json"
+
+try {
+    var response = req.execute();
+    System.log("Status Code: " + response.statusCode);
+    System.log("Response :" + response.contentAsString);
+    att_statusCode = response.statusCode;
+
+} catch (ex) {
+    att_statusCode = 500;
+    System.error("CMDB ticket creation pipeline failed..");
+}
+
+</script>
+        <in-binding>
+            <bind name="att_cmdb_restHost" type="REST:RESTHost" export-name="att_cmdb_restHost"/>
+            <bind name="att_cmdbPayload" type="Properties" export-name="att_cmdbPayload"/>
+            <bind name="att_cmdbURLTemplate" type="string" export-name="att_cmdbURLTemplate"/>
+        </in-binding>
+        <out-binding>
+            <bind name="att_statusCode" type="number" export-name="att_statusCode"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="166.47058823529412" x="669.4117647058823"/>
+    </workflow-item>
+    <workflow-item name="item9" out-name="item6" type="task" comparator="0">
+        <display-name>Prepare Payload</display-name>
+        <script encoded="false">var vm = System.getModule("com.shs.library.vra.utility").getVMByName(vmName);
+
+
+att_cmdbPayload = JSON.parse(att_cmdbPayloadTemplate);
+
+att_cmdbPayload["vmhostname"] = vmName;
+att_cmdbPayload["status"] = "Retired";
+att_cmdbPayload["state"] = "Stopped";
+</script>
+        <in-binding>
+            <bind name="att_cmdbPayloadTemplate" type="Text" export-name="att_cmdbPayloadTemplate"/>
+            <bind name="vmName" type="string" export-name="vmName"/>
+            <bind name="requestId" type="string" export-name="requestId"/>
+        </in-binding>
+        <out-binding>
+            <bind name="att_cmdbPayload" type="Properties" export-name="att_cmdbPayload"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="142.94117647058823" x="434.11764705882354"/>
+    </workflow-item>
+    <workflow-item name="item13" out-name="item28" alt-out-name="item14" type="custom-condition" comparator="0">
+        <display-name>isSuccess?</display-name>
+        <script encoded="false">if(att_statusCode&gt;=400){
+    return false;
+}
+return true;</script>
+        <in-binding>
+            <bind name="att_statusCode" type="number" export-name="att_statusCode"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="156.47058823529412" x="834.1176470588235"/>
+    </workflow-item>
+    <workflow-item name="item14" out-name="item28" type="task" comparator="0">
+        <display-name>Create SHARP ticket</display-name>
+        <script encoded="false">// make a REST call to create SHARP ticket
+
+var restOp = new RESTOperation("SHARP ticket Creation");
+restOp.method = "POST";
+restOp.urlTemplate = att_sharpURLTemplate;
+
+var op = att_sharp_restHost.addOperation(restOp);
+var content = JSON.parse(att_sharpPayloadTemplate);
+var att_temp_payload = JSON.stringify(att_cmdbPayload);
+// create payload
+content["externalID"] = in_externalId;
+content["shortDescription"] = att_temp_payload["Email_subject"];
+var desc = "";
+if (in_eventType.indexOf("Delete") != -1) {
+    desc = "Please mark "+  att_temp_payload["Vmhostname"] + "as RETIRED";
+}
+else {
+    desc = "User ID: " + att_temp_payload["Application_owner"] + "\nUser E-Mail ID: " + att_temp_payload["Assigned_to"] + "\nService Type:  " + att_temp_payload["Service_tier"] + "\nHost Name:  " + att_temp_payload["Vmhostname"] + "\nIP Address:  " + att_temp_payload["IP address"] + "\nCPU: " + att_temp_payload["Cpus"] + "\nMemory:  " + att_temp_payload["Memory"] + "\nStorage:  " + att_temp_payload["Disks"] + "\nNetwork:  " + att_temp_payload["network"] + "\nLocation:  " + att_temp_payload["location"] + "\nOperating System:  " + att_temp_payload["OSVersion"] + "\nMAC Address:  " + att_temp_payload["mac_address"] + "\nDomain:  " + att_temp_payload["domain"] + "\nEnvironment: " + att_temp_payload["environment"];
+}
+content["detailedDescription"] = desc;
+
+System.log("Sharp Payload " + JSON.stringify(content));
+var req = op.createRequest(null, JSON.stringify(content));
+req.contentType = "application/json"
+
+try {
+    var response = req.execute();
+    System.log(response.contentAsString);
+    System.log(response.statusCode);
+    att_isSharpTicketCreated = true;
+}
+catch (ex) {
+    System.error("SHARP ticket creation pipeline failed...");
+}
+</script>
+        <in-binding>
+            <bind name="att_sharp_restHost" type="REST:RESTHost" export-name="att_sharp_restHost"/>
+            <bind name="att_sharpURLTemplate" type="string" export-name="att_sharpURLTemplate"/>
+            <bind name="att_sharpPayloadTemplate" type="Text" export-name="att_sharpPayloadTemplate"/>
+            <bind name="att_cmdbPayload" type="Properties" export-name="att_cmdbPayload"/>
+        </in-binding>
+        <out-binding>
+            <bind name="att_isSharpTicketCreated" type="boolean" export-name="att_isSharpTicketCreated"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="95.88235294117648" x="834.1176470588235"/>
+    </workflow-item>
+    <workflow-item name="item15" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="274.11764705882354" x="74.11764705882354"/>
+    </workflow-item>
+    <workflow-item name="item16" out-name="item9" alt-out-name="item3" type="custom-condition" comparator="0">
+        <display-name>isVMDeleted?</display-name>
+        <script encoded="false">if(subject.indexOf("VmRemovedEvent")!=-1){
+    return true;
+}
+return false;</script>
+        <in-binding>
+            <bind name="subject" type="string" export-name="subject"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="132.94117647058823" x="245.88235294117646"/>
+    </workflow-item>
+    <workflow-item name="item18" out-name="item6" type="task" comparator="0">
+        <display-name>Prepare Payload</display-name>
+        <script encoded="false">var vm = System.getModule("com.shs.library.vra.utility").getVMByName(vmName);
+var macAddress = System.getModule("com.shs.library.vra.utility").getMacAddressByVM(vm);
+var vmData = System.getModule("com.shs.library.vra.utility").getVmData(vm);
+var diskData = System.getModule("com.shs.library.vra.utility").getVmDiskData(vm);
+var cpuAndMemory = System.getModule("com.shs.library.vra.utility").getCpuAndMemoryOfVm(vm);
+var ipAddress = System.getModule("com.shs.library.vra.utility").getVMIpAddress(vm);
+var cluster = System.getModule("com.vmware.library.vc.cluster").getComputeResourceOfVm(vm);
+
+att_cmdbPayload = JSON.parse(att_cmdbPayloadTemplate);
+
+var os = vmData["os"];
+if (os) {
+    var osVer = os.toLowerCase();
+    if (osVer.indexOf("client") != -1) {
+        att_cmdbPayload["model_id"] = "VMware Virtual Client";
+    }
+}
+
+// detetermine environment according cluster
+
+
+att_cmdbPayload["vmhostname"] = vmName;
+att_cmdbPayload["status"] = "Installed";
+att_cmdbPayload["osversion"] = os;
+att_cmdbPayload["disk_size"] = diskData["size"]
+att_cmdbPayload["mac_address"]= macAddress;
+att_cmdbPayload["ip_address"] = ipAddress;
+att_cmdbPayload["install_location"] = "VAR PA INFRA POC";
+att_cmdbPayload["environment"] = "Test";
+att_cmdbPayload["network_type"] = "Non-SNX"
+att_cmdbPayload["correlation_id"] = vmData["instanceId"];
+att_cmdbPayload["cpus"] = cpuAndMemory["cpu"];
+att_cmdbPayload["memory"] = cpuAndMemory["memory"];
+att_cmdbPayload["disks"] = diskData["count"];
+att_cmdbPayload["resourceid"] = vmData["instanceId"];
+</script>
+        <in-binding>
+            <bind name="att_cmdbPayloadTemplate" type="Text" export-name="att_cmdbPayloadTemplate"/>
+            <bind name="eventData" type="Properties" export-name="eventData"/>
+            <bind name="vmName" type="string" export-name="vmName"/>
+            <bind name="requestId" type="string" export-name="requestId"/>
+        </in-binding>
+        <out-binding>
+            <bind name="att_cmdbPayload" type="Properties" export-name="att_cmdbPayload"/>
+            <bind name="att_domain" type="string" export-name="att_domain"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="84.11764705882354" x="434.11764705882354"/>
+    </workflow-item>
+    <workflow-item name="item20" out-name="item21" alt-out-name="item15" type="custom-condition" comparator="0">
+        <display-name>isOwnerAdded?</display-name>
+        <script encoded="false">if(subject.indexOf("CustomFieldValueChangedEvent")!=-1){
+    return true;
+}
+return false;</script>
+        <in-binding>
+            <bind name="subject" type="string" export-name="subject"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="274.11764705882354" x="245.88235294117646"/>
+    </workflow-item>
+    <workflow-item name="item21" out-name="item6" type="task" comparator="0">
+        <display-name>Prepare Payload</display-name>
+        <script encoded="false">var vm = System.getModule("com.shs.library.vra.utility").getVMByName(vmName);
+var vmData = System.getModule("com.shs.library.vra.utility").getVmData(vm);
+var ipAddress = System.getModule("com.shs.library.vra.utility").getVMIpAddress(vm)
+
+att_cmdbPayload = JSON.parse(att_cmdbPayloadTemplate);
+att_cmdbPayload["vmhostname"] = vmName;
+att_cmdbPayload["application_owner"] = eventData["owner"];
+att_cmdbPayload["assigned_to"] = eventData["owner"];
+att_cmdbPayload["osversion"] = vmData["os"];
+att_cmdbPayload["ip_address"] = ipAddress;
+att_cmdbPayload["owned_by"]= eventData["owner"];
+att_cmdbPayload["status"]= "Installed";
+att_cmdbPayload["state"] = vmData["state"];</script>
+        <in-binding>
+            <bind name="eventData" type="Properties" export-name="eventData"/>
+            <bind name="att_cmdbPayloadTemplate" type="Text" export-name="att_cmdbPayloadTemplate"/>
+            <bind name="vmName" type="string" export-name="vmName"/>
+        </in-binding>
+        <out-binding>
+            <bind name="att_cmdbPayload" type="Properties" export-name="att_cmdbPayload"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="284.11764705882354" x="434.11764705882354"/>
+    </workflow-item>
+    <workflow-item name="item23" out-name="item18" alt-out-name="item16" type="custom-condition" comparator="0">
+        <display-name>isVmCloned?</display-name>
+        <script encoded="false">if(subject.indexOf("VmClonedEvent")!=-1){
+    return true;
+}
+return false;</script>
+        <in-binding>
+            <bind name="subject" type="string" export-name="subject"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="74.11764705882354" x="245.88235294117646"/>
+    </workflow-item>
+    <workflow-item name="item27" type="link" linked-workflow-id="9bee97bc-4f38-4fd1-8e36-a05e962888ac" comparator="0">
+        <display-name>Update Active Directory</display-name>
+        <in-binding>
+            <bind name="in_vmName" type="string" export-name="vmName"/>
+            <bind name="in_event" type="string" export-name="subject"/>
+            <bind name="in_domain" type="string" export-name="att_domain"/>
+        </in-binding>
+        <out-binding>
+            <bind name="out_outputStatus" type="boolean" export-name="att_adOutputStatus"/>
+        </out-binding>
+        <description> </description>
+        <position y="7.0" x="1022.3529411764707"/>
+    </workflow-item>
+    <workflow-item name="item28" out-name="item29" type="task" comparator="0">
+        <display-name>Dump Logs</display-name>
+        <script encoded="false">var vmName = att_cmdbPayload["Vmhostname"];
+var action = att_event;
+var result = "";
+
+if (att_statusCode &gt;= 400) {
+    if (att_isSharpTicketCreated) {
+        result = "SUCCESS - SHARP TICKET CREATED"
+    } else {
+        result = "FAILED";
+    }
+}
+else {
+    result = "SUCCESS";
+}
+
+var today = new Date();
+var day = String(today.getDate());
+var month = String(today.getMonth() + 1);
+var year = String(today.getFullYear());
+var strToday = month + '_' + day + '_' + year;
+
+var fileName = "CMDBAssetEntryLogs" + "_" + strToday + ".csv";
+var folder = "Library/CMDB/Logs";
+
+var resElems = Server.getResourceElementCategoryWithPath(folder);
+var payload = JSON.stringify(att_cmdbPayload);
+var payload_str = payload.split(",").join("/")
+
+//Get all resource elements in "/Siemens/cmdb" folder.
+var control = true;
+if (resElems.allResourceElements.length &gt; 0) {
+    resElems.resourceElements.forEach(function (entry) {
+        if (entry.name == fileName) {
+            var originalContent = entry.getContentAsMimeAttachment().content;
+            var dateTime = new Date().toLocaleString();
+            var element = new MimeAttachment();
+            element.mimeType = "text/plain";
+            element.content = originalContent + "\n" + vmName + "," + action + "," + dateTime + "," + payload_str + "," + result;
+            entry.setContentFromMimeAttachment(element);
+            control = false;
+        }
+    });
+}
+if (control) { //if the file is not found, create it.
+    var originalContent = "MachineName,Action,DateTime,Payload,Summary";
+    var dateTime = new Date().toLocaleString();
+    var element = new MimeAttachment();
+    element.mimeType = "text/plain";
+    element.content = originalContent + "\n" + vmName + "," + action + "," + dateTime + "," + payload_str + "," + result;
+    Server.createResourceElement(folder, fileName, element);
+}</script>
+        <in-binding>
+            <bind name="att_cmdbPayload" type="Properties" export-name="att_cmdbPayload"/>
+            <bind name="att_event" type="string" export-name="att_event"/>
+            <bind name="att_isSharpTicketCreated" type="boolean" export-name="att_isSharpTicketCreated"/>
+            <bind name="att_statusCode" type="number" export-name="att_statusCode"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="166.47058823529412" x="1022.3529411764707"/>
+    </workflow-item>
+    <workflow-item name="item29" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="250.58823529411768" x="1062.3529411764707"/>
+    </workflow-item>
+</ns2:workflow>

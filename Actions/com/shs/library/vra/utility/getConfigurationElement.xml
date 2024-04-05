@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getConfigurationElement" result-type="Any" api-version="6.0.0" id="bc3fd4ba-d446-4678-b83b-211db628ebef" version="1.0.0" category-name="com.shs.library.vra.utility">
+  <description><![CDATA[This actions returns configuration element attribute value]]></description>
+  <param n="key" t="string"/>
+  <param n="path" t="string"/>
+  <param n="configName" t="string"/>
+  <script encoded="false"><![CDATA[var configElement = undefined;
+for each(configElement in Server.getConfigurationElementCategoryWithPath(path).configurationElements){
+	if(configElement.name == configName){
+        return configElement.getAttributeWithKey(key)
+	}
+}
+
+return configElement;]]></script>
+</dunes-script-module>
